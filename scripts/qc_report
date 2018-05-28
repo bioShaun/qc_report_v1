@@ -1,0 +1,26 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import argparse
+from main import pdf_report
+import os
+
+
+'''
+this is main python script file to generate html report & pdf report
+'''
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        description='---create mRNA analysis report---')
+    parser.add_argument(
+        '-n',
+        '--project_name',
+        help='project name for the report.',
+        default='测试报告')
+    parser.add_argument('mRNA_report_path',
+                        help='a dir where include your analysis results')
+    args = parser.parse_args()
+
+    pdf_report.create_pdf_report(
+        os.path.abspath(args.mRNA_report_path),
+        args.project_name, True)
