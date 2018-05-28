@@ -5,13 +5,13 @@ from setuptools import setup, find_packages
 version = '0.1dev'
 
 print '''------------------------------
-Installing ngsReport version {}
+Installing fastqcReport version {}
 ------------------------------
 '''.format(version)
 
 
 setup(
-    name='ngsReport',
+    name='fastqcReport',
     version=version,
     author='lx Gui',
     author_email='guilixuan@gmail.com',
@@ -29,6 +29,6 @@ setup(
 
 
 print '''------------------------------
-ngsReport installation complete!
+fastqcReport installation complete!
 ------------------------------
 '''
