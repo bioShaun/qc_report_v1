@@ -17,10 +17,24 @@ if __name__ == '__main__':
         '--project_name',
         help='project name for the report.',
         default='测试报告')
+    parser.add_argument(
+        '-i',
+        '--project_id',
+        help='project id for the report.',
+        default='测试报告')
+    parser.add_argument(
+        '-c',
+        '--company',
+        help='company name.',
+        default='onmath'
+    )
     parser.add_argument('report_path',
                         help='a dir where include your analysis results')
     args = parser.parse_args()
 
     pdf_report.create_pdf_report(
         os.path.abspath(args.report_path),
-        args.project_name, True)
+        args.project_name,
+        args.project_id,
+        True,
+        args.company)

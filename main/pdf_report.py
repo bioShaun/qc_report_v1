@@ -10,7 +10,7 @@ add all function doc on 2017-06-16
 import os
 import sys
 import subprocess
-from . import mRNA_data_dict, pdf_analysis_path, pdf_jinja_env, pdf_settings, pdf_plots_size_dict
+from . import mRNA_data_dict, pdf_analysis_path, pdf_jinja_env, pdf_settings, pdf_plots_size_dict, company_setting_mannager
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -236,7 +236,7 @@ def check_analysis_part(generate_report_path, analysis_part, part_dict, label, p
     # pdf_param_dict.update(analysis_dict)
 
 
-def create_pdf_report(generate_report_path, project_name, part):
+def create_pdf_report(generate_report_path, project_name, project_id, part, company='onmath'):
     '''
     param:a path where to your analysis's report data
     function:generate report tex file
@@ -244,14 +244,21 @@ def create_pdf_report(generate_report_path, project_name, part):
     pdf_param_dict = {}
     pdf_param_dict.update(pdf_plots_size_dict)
     pdf_head_dict = dict(project_name=project_name,
+                         project_id=project_id,
                          report_name=pdf_settings['project_name'],
                          address=pdf_settings['address'],
                          phone=pdf_settings['phone'],
-                         logo_path=pdf_settings['logo_path'],
                          pipeline_path=pdf_settings['pipeline_path'],
                          mRNAworkflow_path=pdf_settings['mRNAworkflow_path']
                          )
     pdf_param_dict.update(pdf_head_dict)
+    pdf_head_sup_dict = dict(
+        logo_path=company_setting_mannager[company]['logo_path'],
+        company_full_name=company_setting_mannager[company]['company_full_name'],
+        company_website=company_setting_mannager[company]['company_website'],
+        company_abbr=company_setting_mannager[company]['company_abbr'],
+    )
+    pdf_param_dict.update(pdf_head_sup_dict)
     # enrichment:
     # fastqc:
     fastqc_dict = check_analysis_part(generate_report_path,
@@ -267,10 +274,10 @@ def create_pdf_report(generate_report_path, project_name, part):
     if not os.path.exists(generate_report_path):
         os.makedirs(generate_report_path)
     with open(os.path.join(generate_report_path,
-                           '{pn}.tex'.format(pn=project_name)), 'w+') as f:
+                           '{pn}.tex'.format(pn=project_id)), 'w+') as f:
         f.write(template.render(pdf_param_dict))
     print '-------------------------'
     print 'pdf report tex file done!'
     print '-------------------------'
     run_tex(tex_path=os.path.join(generate_report_path,
-                                  '{pn}.tex'.format(pn=project_name)))
+                                  '{pn}.tex'.format(pn=project_id)))

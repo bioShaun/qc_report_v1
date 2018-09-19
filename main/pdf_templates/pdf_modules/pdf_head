@@ -32,9 +32,9 @@
 \fancyhead{}
 \lhead{\usebox{\headpic}}
 %\chead{\today}
-\rhead{昂迈思科技有限公司}
+\rhead{\VAR{company_full_name}}
 \fancyfoot{}
-\lfoot{\emph{www.onmath.cn}}
+\lfoot{\emph{\VAR{company_website}}}
 \rfoot{page \thepage}
 \newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
 \newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
@@ -55,6 +55,7 @@
 \makeatother
 \author{%
     \textbf{项目名称:} \VAR{project_name} \\
+    \textbf{合同编号:} \VAR{project_id} \\
     \textbf{联系地址:} \VAR{address} \\
     \textbf{联系电话:} \VAR{phone} \\
     }
@@ -80,7 +81,7 @@
             \node (X) at (0,-1ex) {};
         }
         }%
-        {\textsc{OnMath}}
+        %{\textsc{\VAR{company_abbr}}}
     }
     \null\vfill
     \noindent
@@ -91,11 +92,11 @@
     \end{minipage} \\[6cm]
     \vspace{-3cm}
     \hspace{10cm}
-    \begin{minipage}[t]{0.4\linewidth}
-         \begin{flushright}
-    \includegraphics[scale=0.1]{\VAR{logo_path}}
-	    \end{flushright}
-    \end{minipage}
+    % \begin{minipage}[t]{0.4\linewidth}
+    %      \begin{flushright}
+    % \includegraphics[scale=0.1]{\VAR{logo_path}}
+    %       \end{flushright}
+    % \end{minipage}
 \end{titlepage}
 \newpage
 \tableofcontents

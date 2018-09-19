@@ -52,10 +52,19 @@ max_cell_len = command.get('mRNA-pdf-info', 'max_cell_len')
 project_name = command.get('mRNA-pdf-info', 'project_name')
 logo_path = os.path.join(CFG_DIR, command.get(
     'mRNA-pdf-static', 'logo_path'))
+tcuni_logo_path = os.path.join(CFG_DIR, command.get(
+    'mRNA-pdf-static', 'tcuni_logo_path'))
 pipeline_path = os.path.join(CFG_DIR, command.get(
     'mRNA-pdf-static', 'pipeline_path'))
 mRNAworkflow_path = os.path.join(CFG_DIR, command.get(
     'mRNA-pdf-static', 'mRNAworkflow_path'))
+company_full_name = command.get('mRNA-pdf-static', 'company_full_name')
+company_website = command.get('mRNA-pdf-static', 'company_website')
+company_abbr = command.get('mRNA-pdf-static', 'company_abbr')
+tcuni_company_full_name = command.get(
+    'mRNA-pdf-static', 'tcuni_company_full_name')
+tcuni_company_website = command.get('mRNA-pdf-static', 'tcuni_company_website')
+tcuni_company_abbr = command.get('mRNA-pdf-static', 'tcuni_company_abbr')
 # all plots size:
 reads_quality_path_size = command.get(
     'mRNA-pdf-size', 'reads_quality_path_size')
@@ -152,14 +161,36 @@ pdf_analysis_path = {'enrichment': enrichment_analysis_path,
                      'diff': diff_analysis_path,
                      'rseqc': rseqc_analysis_path}
 # other info
+
 pdf_settings = {'address': address,
                 'phone': phone,
                 'table_rows': table_rows,
                 'max_cell_len': max_cell_len,
-                'logo_path': logo_path,
                 'project_name': project_name,
                 'pipeline_path': pipeline_path,
-                'mRNAworkflow_path': mRNAworkflow_path}
+                'mRNAworkflow_path': mRNAworkflow_path,
+                'company_full_name': company_full_name,
+                'company_website': company_website,
+                'company_abbr': company_abbr}
+
+company_setting0 = {
+    'logo_path': logo_path,
+    'company_full_name': company_full_name,
+    'company_website': company_website,
+    'company_abbr': company_abbr}
+
+
+company_setting1 = {
+    'logo_path': tcuni_logo_path,
+    'company_full_name': tcuni_company_full_name,
+    'company_website': tcuni_company_website,
+    'company_abbr': tcuni_company_abbr}
+
+company_setting_mannager = {
+    'onmath': company_setting0,
+    'tcuni': company_setting1,
+}
+
 
 pdf_plots_size_dict = dict(reads_quality_path_size=reads_quality_path_size,
                            gc_plot_size=gc_plot_size, inner_distance_plot_size=inner_distance_plot_size,
