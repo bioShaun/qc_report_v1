@@ -1,3 +1,4 @@
+
 # coding:UTF-8
 '''
 this is py2report's pdf_report moudle which a python script generate pdf mRNA report
@@ -45,8 +46,6 @@ def three_line_list(input_path, colunms, split='\t'):
             thead = data[0]
             table_cols = len(thead.strip().split(split))
             tbody = data[1:]
-            if len(tbody) > int(pdf_settings['table_rows']):
-                tbody = tbody[:int(pdf_settings['table_rows'])]
 
             if table_cols < colunms:
                 cols = table_cols

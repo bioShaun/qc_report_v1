@@ -36,35 +36,66 @@ CFG_DIR = os.path.dirname(os.path.realpath(__file__))
 configFilePath = os.path.join(os.path.dirname(__file__), 'report_conf.conf')
 command = configparser.ConfigParser()
 command.read(configFilePath)
+
 # all path
-mRNA_data_path = command.get('mRNA-report-data', 'report_data_path')
-mRNA_result_path = command.get('mRNA-report-result', 'report_result_path')
-enrichment_path = command.get('mRNA-path', 'enrichment_path')
-fastqc_path = command.get('mRNA-path', 'fastqc_path')
-mapping_path = command.get('mRNA-path', 'mapping_path')
-quantification_path = command.get('mRNA-path', 'quantification_path')
-rseqc_path = command.get('mRNA-path', 'rseqc_path')
+mRNA_data_path = command.get(
+    'mRNA-report-data', 'report_data_path')
+mRNA_result_path = command.get(
+    'mRNA-report-result', 'report_result_path')
+enrichment_path = command.get(
+    'mRNA-path', 'enrichment_path')
+fastqc_path = command.get(
+    'mRNA-path', 'fastqc_path')
+mapping_path = command.get(
+    'mRNA-path', 'mapping_path')
+quantification_path = command.get(
+    'mRNA-path', 'quantification_path')
+rseqc_path = command.get(
+    'mRNA-path', 'rseqc_path')
+
 # pdf settings
+# general
 address = command.get('mRNA-pdf-info', 'address')
 phone = command.get('mRNA-pdf-info', 'phone')
 table_rows = command.get('mRNA-pdf-info', 'table_rows')
 max_cell_len = command.get('mRNA-pdf-info', 'max_cell_len')
 project_name = command.get('mRNA-pdf-info', 'project_name')
-logo_path = os.path.join(CFG_DIR, command.get(
-    'mRNA-pdf-static', 'logo_path'))
-tcuni_logo_path = os.path.join(CFG_DIR, command.get(
-    'mRNA-pdf-static', 'tcuni_logo_path'))
 pipeline_path = os.path.join(CFG_DIR, command.get(
     'mRNA-pdf-static', 'pipeline_path'))
 mRNAworkflow_path = os.path.join(CFG_DIR, command.get(
     'mRNA-pdf-static', 'mRNAworkflow_path'))
-company_full_name = command.get('mRNA-pdf-static', 'company_full_name')
-company_website = command.get('mRNA-pdf-static', 'company_website')
-company_abbr = command.get('mRNA-pdf-static', 'company_abbr')
+
+# onmath
+logo_path = os.path.join(CFG_DIR, command.get(
+    'mRNA-pdf-static', 'logo_path'))
+company_full_name = command.get(
+    'mRNA-pdf-static', 'company_full_name')
+company_website = command.get(
+    'mRNA-pdf-static', 'company_website')
+company_abbr = command.get(
+    'mRNA-pdf-static', 'company_abbr')
+
+# tcuni
+tcuni_logo_path = os.path.join(CFG_DIR, command.get(
+    'mRNA-pdf-static', 'tcuni_logo_path'))
 tcuni_company_full_name = command.get(
     'mRNA-pdf-static', 'tcuni_company_full_name')
-tcuni_company_website = command.get('mRNA-pdf-static', 'tcuni_company_website')
-tcuni_company_abbr = command.get('mRNA-pdf-static', 'tcuni_company_abbr')
+tcuni_company_website = command.get(
+    'mRNA-pdf-static', 'tcuni_company_website')
+tcuni_company_abbr = command.get(
+    'mRNA-pdf-static', 'tcuni_company_abbr')
+
+# TALLY
+tally_logo_path = os.path.join(CFG_DIR, command.get(
+    'mRNA-pdf-static', 'tally_logo_path'))
+tally_company_full_name = command.get(
+    'mRNA-pdf-static', 'tally_company_full_name')
+tally_company_website = command.get(
+    'mRNA-pdf-static', 'tally_company_website')
+tally_company_abbr = command.get(
+    'mRNA-pdf-static', 'tally_company_abbr')
+
+
 # all plots size:
 reads_quality_path_size = command.get(
     'mRNA-pdf-size', 'reads_quality_path_size')
@@ -86,46 +117,47 @@ kegg_barplor_size = command.get('mRNA-pdf-size', 'kegg_barplor_size')
 pathview_path_size = command.get('mRNA-pdf-size', 'pathview_path_size')
 mapping_plot_size = command.get('mRNA-pdf-size', 'mapping_plot_size')
 
-mRNA_data_dict = dict(enrichment=enrichment_path, fastqc='',
-                      mapping=mapping_path, quantification=quantification_path,
-                      rseqc=rseqc_path)
-
-# for key, value in mRNA_data_dict.items():
-#     mRNA_data_dict[key] = os.path.join(mRNA_data_path, value)
+mRNA_data_dict = dict(
+    enrichment=enrichment_path, fastqc='',
+    mapping=mapping_path,
+    quantification=quantification_path,
+    rseqc=rseqc_path)
 
 mRNA_result_dict = deepcopy(mRNA_data_dict)
-# for key, value in mRNA_result_dict.items():
-#     mRNA_result_dict[key] = os.path.join(mRNA_result_path, value)
 
 #################
 # pdf version
 #################
 
 # enrichment part
-enrichment_analysis_path = dict(go_barplot_path='go.enrichment.barplot.pdf.png',
-                                kegg_barplot_path='kegg.enrichment.barplot.pdf.png',
-                                pathview_path='kegg.pathview.png', dag_bp_path='BP.GO.DAG.png',
-                                dag_cc_path='CC.GO.DAG.png', dag_mf_path='MF.GO.DAG.png',
-                                go_table_path='report.go.table.txt', kegg_table_path='report.kegg.table.txt')
+enrichment_analysis_path = dict(
+    go_barplot_path='go.enrichment.barplot.pdf.png',
+    kegg_barplot_path='kegg.enrichment.barplot.pdf.png',
+    pathview_path='kegg.pathview.png', dag_bp_path='BP.GO.DAG.png',
+    dag_cc_path='CC.GO.DAG.png', dag_mf_path='MF.GO.DAG.png',
+    go_table_path='report.go.table.txt',
+    kegg_table_path='report.kegg.table.txt')
 
 for key, value in enrichment_analysis_path.items():
     enrichment_analysis_path[key] = os.path.join(
         mRNA_data_path, enrichment_path, value)
-# fastqc part
-fastqc_analysis_path = dict(gc_barplot_path='gc_plot/gc_distribution.line.report.png',
-                            reads_quality_path='reads_quality_plot/reads_quality.bar.report.png',
-                            qc_table_path='fastqc_general_stats.txt')
 
-# for key, value in fastqc_analysis_path.items():
-#     fastqc_analysis_path[key] = os.path.join(
-#         mRNA_data_path, fastqc_path, value)
+# fastqc part
+fastqc_analysis_path = dict(
+    gc_barplot_path='gc_plot/gc_distribution.line.report.png',
+    reads_quality_path='reads_quality_plot/reads_quality.bar.report.png',
+    qc_table_path='fastqc_general_stats.txt')
+
 # mapping part
 mapping_analysis_path = dict(
-    mapping_table_path='mapping_stats.report', mapping_plot_path='mapping_stats_plot.pdf.png')
+    mapping_table_path='mapping_stats.report',
+    mapping_plot_path='mapping_stats_plot.pdf.png')
 
 for key, value in mapping_analysis_path.items():
     mapping_analysis_path[key] = os.path.join(
         mRNA_data_path, mapping_path, value)
+
+
 # quantification part
 expression_summary_dir = 'expression_summary'
 quantification_analysis_path = dict(
@@ -138,6 +170,7 @@ quantification_analysis_path = dict(
 for key, value in quantification_analysis_path.items():
     quantification_analysis_path[key] = os.path.join(
         mRNA_data_path, quantification_path, expression_summary_dir, value)
+
 # diff part
 diff_analysis_path = dict(volcano_plot_path='ALL.Volcano_plot.pdf.png',
                           diff_heatmap_path='Diff.genes.heatmap.pdf.png',
@@ -146,10 +179,12 @@ diff_analysis_path = dict(volcano_plot_path='ALL.Volcano_plot.pdf.png',
 for key, value in diff_analysis_path.items():
     diff_analysis_path[key] = os.path.join(
         mRNA_data_path, quantification_path, expression_summary_dir, value)
+
 # rseqc part
-rseqc_analysis_path = dict(genebody_coverage_plot_path='genebody_coverage/genebody_coverage.point.pdf.png',
-                           inner_distance_plot_path='inner_distance/inner_distance.bar.pdf.png',
-                           read_distribution_plot_path='read_distribution/read_distribution.bar.pdf.png')
+rseqc_analysis_path = dict(
+    genebody_coverage_plot_path='genebody_coverage/genebody_coverage.point.pdf.png',
+    inner_distance_plot_path='inner_distance/inner_distance.bar.pdf.png',
+    read_distribution_plot_path='read_distribution/read_distribution.bar.pdf.png')
 
 for key, value in rseqc_analysis_path.items():
     rseqc_analysis_path[key] = os.path.join(mRNA_data_path, rseqc_path, value)
@@ -186,23 +221,32 @@ company_setting1 = {
     'company_website': tcuni_company_website,
     'company_abbr': tcuni_company_abbr}
 
+company_setting2 = {
+    'logo_path': tally_logo_path,
+    'company_full_name': tally_company_full_name,
+    'company_website': tally_company_website,
+    'company_abbr': tally_company_abbr}
+
 company_setting_mannager = {
     'onmath': company_setting0,
     'tcuni': company_setting1,
+    'tally': company_setting2
 }
 
 
-pdf_plots_size_dict = dict(reads_quality_path_size=reads_quality_path_size,
-                           gc_plot_size=gc_plot_size, inner_distance_plot_size=inner_distance_plot_size,
-                           genebody_coverage_plot_size=genebody_coverage_plot_size,
-                           read_distribution_plot_size=read_distribution_plot_size,
-                           correlation_heatmap_size=correlation_heatmap_size,
-                           gene_expression_size=gene_expression_size,
-                           pca_plot_size=pca_plot_size,
-                           volcano_plot_size=volcano_plot_size,
-                           diff_heatmap_size=diff_heatmap_size,
-                           go_barplor_size=go_barplor_size,
-                           kegg_barplor_size=kegg_barplor_size,
-                           pathview_path_size=pathview_path_size,
-                           mapping_plot_size=mapping_plot_size
-                           )
+pdf_plots_size_dict = dict(
+    reads_quality_path_size=reads_quality_path_size,
+    gc_plot_size=gc_plot_size,
+    inner_distance_plot_size=inner_distance_plot_size,
+    genebody_coverage_plot_size=genebody_coverage_plot_size,
+    read_distribution_plot_size=read_distribution_plot_size,
+    correlation_heatmap_size=correlation_heatmap_size,
+    gene_expression_size=gene_expression_size,
+    pca_plot_size=pca_plot_size,
+    volcano_plot_size=volcano_plot_size,
+    diff_heatmap_size=diff_heatmap_size,
+    go_barplor_size=go_barplor_size,
+    kegg_barplor_size=kegg_barplor_size,
+    pathview_path_size=pathview_path_size,
+    mapping_plot_size=mapping_plot_size
+)
