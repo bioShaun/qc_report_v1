@@ -47,8 +47,12 @@
 \renewcommand\epigraphflush{flushleft}
 \renewcommand\epigraphsize{\normalsize}
 \setlength\epigraphwidth{0.7\textwidth}
-%\definecolor{titlepagecolor}{rgb}{0.168,0.835,0.701}
+\BLOCK{ if rna }
+\definecolor{titlepagecolor}{rgb}{0.168,0.835,0.701}
+\BLOCK{ endif }
+\BLOCK{ if exome }
 \definecolor{titlepagecolor}{cmyk}{1,.60,0,.40}
+\BLOCK{ endif }
 \DeclareFixedFont{\titlefont}{T1}{ppl}{b}{it}{0.4in}
 \makeatletter
 \def\printauthor{%

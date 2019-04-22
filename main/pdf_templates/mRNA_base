@@ -18,6 +18,10 @@
 \BLOCK{ include 'pdf_modules/mapping' ignore missing }
 \newpage
 \BLOCK{ endif }
+\BLOCK{ if snp }
+\BLOCK{ include 'pdf_modules/snp' ignore missing }
+\newpage
+\BLOCK{ endif }
 \BLOCK{ if data_control }
 \BLOCK{ include 'pdf_modules/data_control' ignore missing }
 \newpage
@@ -34,21 +38,22 @@
 \BLOCK{ include 'pdf_modules/enrichment' ignore missing }
 \newpage
 \BLOCK{ endif }
-\section{附录}
-\subsection{软件列表}
-\begin{table}[H]
-\centering
-\footnotesize
-\caption{\label{tab:table}软件列表}
+% \section{附录}
 
-\begin{tabular}{lllll}
-\toprule
-名称 & 版本 & 功能 & 参数 & 链接 \\
-\midrule
-FastQC & v0.11.5 & 数据质控 & 默认参数 & \href{http://www.bioinformatics.babraham.ac.uk/projects/fastqc/}{http://www.bioinformatics.babraham.ac.uk/projects/fastqc/} \\
-\bottomrule
-\end{tabular}
-\end{table}
+% \subsection{软件列表}
+% \begin{table}[H]
+% \centering
+% \footnotesize
+% \caption{\label{tab:table}软件列表}
+
+% \begin{tabular}{lllll}
+% \toprule
+% 名称 & 版本 & 功能 & 参数 & 链接 \\
+% \midrule
+% FastQC & v0.11.5 & 数据质控 & 默认参数 & \href{http://www.bioinformatics.babraham.ac.uk/projects/fastqc/}{http://www.bioinformatics.babraham.ac.uk/projects/fastqc/} \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
 
 %------reference--------%
 

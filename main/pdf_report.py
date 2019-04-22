@@ -86,14 +86,17 @@ def check_file(file_dict, generate_report_path, part):
     generate_report_path:a path where to your analysis's report data
     function:check each path's exists and add generate_report_path into them
     '''
+    flag = 1
     for key, value in file_dict.items():
         file_dict[key] = os.path.join(generate_report_path, value)
         if not os.path.exists(file_dict[key]):
+            flag = 0
             if part:
                 print '{file} is not find in: {file_path}'.format(file=key, file_path=os.path.dirname(file_dict[key]))
                 sys.exit(1)
             else:
                 file_dict[key] = None
+    return flag
 
 
 def run_tex(tex_path):
@@ -161,12 +164,44 @@ def fastqc_analysis_part(generate_report_path, part):
     check_file(fastqc_analysis_path, generate_report_path, part)
     qc_list = three_line_list(fastqc_analysis_path['qc_table_path'], colunms=6)
 
-    fastqc_dict = dict(qc_begin=qc_list[0], qc_head=qc_list[1], qc_body=qc_list[2:],
-                       gc_barplot_path=fastqc_analysis_path['gc_barplot_path'],
-                       reads_quality_path=fastqc_analysis_path['reads_quality_path'],
-                       qc_table_path=fastqc_analysis_path['qc_table_path'],
-                       data_stat='data_stat'
-                       )
+    fastqc_dict = dict(
+        qc_begin=qc_list[0], qc_head=qc_list[1], qc_body=qc_list[2:],
+        gc_barplot_path=fastqc_analysis_path['gc_barplot_path'],
+        reads_quality_path=fastqc_analysis_path['reads_quality_path'],
+        qc_table_path=fastqc_analysis_path['qc_table_path'],
+        data_stat='data_stat')
+
+    mapping_path = pdf_analysis_path['mapping']
+    if check_file(mapping_path, generate_report_path, part=False):
+        mapping_list = three_line_list(mapping_path['mapping_table_path'],
+                                       colunms=4)
+        fastqc_dict.update(dict(
+            mapping='mapping',
+            mapping_begin=mapping_list[0],
+            mapping_head=mapping_list[1],
+            mapping_body=mapping_list[2:],
+            mapping_plot_path=mapping_path['mapping_plot_path'],
+            mapping_table_path=mapping_path['mapping_table_path'],
+        ))
+
+    snp_path = pdf_analysis_path['snp']
+    if check_file(snp_path, generate_report_path, part=False):
+        snp_list = three_line_list(snp_path['snp_num_table'],
+                                   colunms=4)
+        fastqc_dict.update(dict(
+            snp='snp',
+            exome='exome',
+            snp_num_begin=snp_list[0],
+            snp_num_head=snp_list[1],
+            snp_num_body=snp_list[2:],
+            snp_num_table=snp_path['snp_num_table'],
+            snp_plot_path=snp_path['snp_plot_path'],
+            report_name='Exome Report'
+        ))
+    else:
+        fastqc_dict.update(
+            {'rna': 'rna',
+             'report_name': 'RNAseq Report'})
 
     return fastqc_dict
 
@@ -177,10 +212,13 @@ def mapping_analysis_part(generate_report_path, part):
     mapping_list = three_line_list(
         mapping_analysis_path['mapping_table_path'], colunms=7)
 
-    mapping_dict = dict(mapping_begin=mapping_list[0], mapping_head=mapping_list[1], mapping_body=mapping_list[2:],
-                        mapping_plot_path=mapping_analysis_path['mapping_plot_path'],
-                        mapping_table_path=mapping_analysis_path['mapping_table_path'],
-                        mapping='mapping')
+    mapping_dict = dict(
+        mapping_begin=mapping_list[0],
+        mapping_head=mapping_list[1],
+        mapping_body=mapping_list[2:],
+        mapping_plot_path=mapping_analysis_path['mapping_plot_path'],
+        mapping_table_path=mapping_analysis_path['mapping_table_path'],
+        mapping='mapping')
 
     return mapping_dict
 
@@ -224,7 +262,9 @@ def quant_analysis_part(generate_report_path, part):
     return quant_dict
 
 
-def check_analysis_part(generate_report_path, analysis_part, part_dict, label, part, func):
+def check_analysis_part(
+        generate_report_path, analysis_part,
+        part_dict, label, part, func):
     if os.path.exists(os.path.join(generate_report_path, analysis_part)):
         analysis_dict = func(generate_report_path, part)
     else:
@@ -235,7 +275,8 @@ def check_analysis_part(generate_report_path, analysis_part, part_dict, label, p
     # pdf_param_dict.update(analysis_dict)
 
 
-def create_pdf_report(generate_report_path, project_name, project_id, part, company='onmath'):
+def create_pdf_report(generate_report_path, project_name,
+                      project_id, part, company='onmath'):
     '''
     param:a path where to your analysis's report data
     function:generate report tex file
@@ -244,7 +285,6 @@ def create_pdf_report(generate_report_path, project_name, project_id, part, comp
     pdf_param_dict.update(pdf_plots_size_dict)
     pdf_head_dict = dict(project_name=project_name,
                          project_id=project_id,
-                         report_name=pdf_settings['project_name'],
                          address=pdf_settings['address'],
                          phone=pdf_settings['phone'],
                          pipeline_path=pdf_settings['pipeline_path'],

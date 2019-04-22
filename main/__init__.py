@@ -59,7 +59,6 @@ address = command.get('mRNA-pdf-info', 'address')
 phone = command.get('mRNA-pdf-info', 'phone')
 table_rows = command.get('mRNA-pdf-info', 'table_rows')
 max_cell_len = command.get('mRNA-pdf-info', 'max_cell_len')
-project_name = command.get('mRNA-pdf-info', 'project_name')
 pipeline_path = os.path.join(CFG_DIR, command.get(
     'mRNA-pdf-static', 'pipeline_path'))
 mRNAworkflow_path = os.path.join(CFG_DIR, command.get(
@@ -150,12 +149,13 @@ fastqc_analysis_path = dict(
 
 # mapping part
 mapping_analysis_path = dict(
-    mapping_table_path='mapping_stats.report',
-    mapping_plot_path='mapping_stats_plot.pdf.png')
+    mapping_table_path='mapping_table.txt',
+    mapping_plot_path='mapping_stats_plot.png')
 
-for key, value in mapping_analysis_path.items():
-    mapping_analysis_path[key] = os.path.join(
-        mRNA_data_path, mapping_path, value)
+# mapping part
+snp_analysis_path = dict(
+    snp_num_table='snp/varNum.txt',
+    snp_plot_path='snp/var_plot.png')
 
 
 # quantification part
@@ -192,6 +192,7 @@ for key, value in rseqc_analysis_path.items():
 pdf_analysis_path = {'enrichment': enrichment_analysis_path,
                      'fastqc': fastqc_analysis_path,
                      'mapping': mapping_analysis_path,
+                     'snp': snp_analysis_path,
                      'quantification': quantification_analysis_path,
                      'diff': diff_analysis_path,
                      'rseqc': rseqc_analysis_path}
@@ -201,7 +202,6 @@ pdf_settings = {'address': address,
                 'phone': phone,
                 'table_rows': table_rows,
                 'max_cell_len': max_cell_len,
-                'project_name': project_name,
                 'pipeline_path': pipeline_path,
                 'mRNAworkflow_path': mRNAworkflow_path,
                 'company_full_name': company_full_name,

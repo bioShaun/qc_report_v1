@@ -15,10 +15,10 @@
 \end{table}
 \BLOCK{ endmacro }
 
-\BLOCK{ macro plot(plot_size,plot_path,caption) }
+\BLOCK{ macro plot(plot_path, caption, plot_size=0.8) }
 \begin{figure}[H]
 \centering
-\includegraphics[scale=\VAR{plot_size}]{\VAR{plot_path}}
+\includegraphics[width=\VAR{plot_size}\textwidth]{\VAR{plot_path}}
 \caption{\VAR{caption}} \label{fig:graph}
 \end{figure}
 \BLOCK{ endmacro }
