@@ -26,6 +26,10 @@
 \BLOCK{ include 'pdf_modules/data_control' ignore missing }
 \newpage
 \BLOCK{ endif }
+\BLOCK{ if lnc_filter }
+\BLOCK{ include 'pdf_modules/lnc_filter' ignore missing }
+\newpage
+\BLOCK{ endif }
 \BLOCK{ if quant }
 \BLOCK{ include 'pdf_modules/quant' ignore missing }
 \newpage

@@ -1,7 +1,7 @@
 \BLOCK{ from 'plots_table' import plot,table }
 \BLOCK{ if mapping_table_path }
 \section{序列比对}
-此部分展示了测序数据比对到基因组的情况。我们使用 BWA\cite{bwa}(Li, Heng and Durbin, Richard. 2013)软件，将测序获得的 reads 比对到基因组，得到的包含 reads 在基因组位置信息的 bam 文件。
+此部分展示了测序数据比对到基因组的情况。我们使用\BLOCK{ if rna }STAR\cite{star}(Dobin A and Davis C A and  Schlesinger F, et al. 2013)\BLOCK{else}BWA\cite{bwa}(Li, Heng and Durbin, Richard. 2013)\BLOCK{ endif }软件，将测序获得的 reads 比对到基因组，得到的包含 reads 在基因组位置信息的 bam 文件。
 各样品比对结果如表所示。
 \VAR{ table(mapping_begin,mapping_head,mapping_body,caption='比对率统计表') }
 \newpage

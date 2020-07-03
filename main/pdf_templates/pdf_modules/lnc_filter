@@ -1,0 +1,13 @@
+\BLOCK{ from 'plots_table' import plot,table }
+\section{lncRNA 筛选}
+我们使用 stringtie\cite{pertea2015stringtie} (Pertea, et al. 2015) 软件进行转录本的拼接，之后使用 cuffcompare 软件对拼接到的转录本进行过滤，最后使用 CPC2\cite{kang2017cpc2} (Kang, Yu-Jian, et al. 2017) 软件对转录本的编码潜能进行预测，lncRNA 候选集，筛选得到的不同类别 lncRNA 如下图所示。
+\\
+\\
+\VAR{ plot(lnc_pie_plot,caption='lncRNA 筛选饼图') }
+\newpage
+\section{lncRNA 靶基因预测}
+我们使用 FEElnc\cite{wucher2017feelnc} (Wucher, et al. 2017) 软件筛选候选 lncRNA 上下游10kb范围内蛋白编码基因作为靶基因候选，lncRNA 与蛋白编码基因位置关系如下图所示，分析结果见结果文件。
+\\
+\\
+\VAR{ plot(feelnc_plot,caption='lncRNA 靶基因候选示意图') }
+

@@ -23,6 +23,11 @@ if __name__ == '__main__':
         help='project id for the report.',
         default='测试报告')
     parser.add_argument(
+        '-t',
+        '--project_type',
+        help='project type.',
+        default='rna')
+    parser.add_argument(
         '-c',
         '--company',
         help='company name.',
@@ -36,5 +41,6 @@ if __name__ == '__main__':
         os.path.abspath(args.report_path),
         args.project_name,
         args.project_id,
-        True,
-        args.company)
+        False,
+        args.company,
+        args.project_type)

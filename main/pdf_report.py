@@ -16,6 +16,16 @@ from . import mRNA_data_dict, pdf_analysis_path, pdf_jinja_env, pdf_settings, pd
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+PROJECT_CN = {
+    'rna': '转录组测序',
+    'lnc': '长链非编码 RNA 测序',
+    'reseq': '全基因组重测序',
+    'exome': '外显子组测序',
+    'denovo': '基因组测序',
+    'chip': 'ChIP-Seq 测序',
+}
+
+
 main_path = os.path.dirname(os.path.realpath(__file__))
 ref_file_path = os.path.join(main_path, 'pdf_templates', 'ref.bib')
 
@@ -53,7 +63,7 @@ def three_line_list(input_path, colunms, split='\t'):
                 cols = colunms
 
             table_list = []
-            table_begin = '\\begin{tabular}{%s}' % ('c' * cols)
+            table_begin = '\\begin{longtable}{%s}' % ('c' * cols)
             table_list.append(table_begin)
 
             if cols > 3:
@@ -91,6 +101,7 @@ def check_file(file_dict, generate_report_path, part):
         file_dict[key] = os.path.join(generate_report_path, value)
         if not os.path.exists(file_dict[key]):
             flag = 0
+            print(file_dict[key])
             if part:
                 print '{file} is not find in: {file_path}'.format(file=key, file_path=os.path.dirname(file_dict[key]))
                 sys.exit(1)
@@ -120,10 +131,10 @@ def run_tex(tex_path):
         tex_file=tex_file), shell=True)
     subprocess.call('xelatex {tex_file} > summary'.format(
         tex_file=tex_file), shell=True)
-    for each_file in os.listdir(tex_dir):
-        if os.path.splitext(each_file)[1] in rm_set:
-            subprocess.call('rm {file}'.format(
-                file=os.path.join(tex_dir, each_file)), shell=True)
+    # for each_file in os.listdir(tex_dir):
+    #     if os.path.splitext(each_file)[1] in rm_set:
+    #         subprocess.call('rm {file}'.format(
+    #             file=os.path.join(tex_dir, each_file)), shell=True)
 
     print '---------------------'
     print 'pdf mRNA report done!'
@@ -132,30 +143,27 @@ def run_tex(tex_path):
 
 def enrichment_analysis_part(generate_report_path, part):
     enrichment_analysis_path = pdf_analysis_path['enrichment']
-    check_file(enrichment_analysis_path, generate_report_path, part)
-    kegg_list = three_line_list(
-        enrichment_analysis_path['kegg_table_path'], colunms=7)
-    go_list = three_line_list(
-        enrichment_analysis_path['go_table_path'], colunms=7)
+    if check_file(enrichment_analysis_path, generate_report_path, part):
+        go_list = three_line_list(
+            enrichment_analysis_path['go_table_path'], colunms=7)
 
-    if enrichment_analysis_path['dag_bp_path'] and enrichment_analysis_path['dag_cc_path'] and enrichment_analysis_path['dag_mf_path']:
-        dag_plots = True
+        if enrichment_analysis_path['dag_bp_path'] and enrichment_analysis_path['dag_cc_path'] and enrichment_analysis_path['dag_mf_path']:
+            dag_plots = True
+        else:
+            dag_plots = False
+
+        enrichment_dict = dict(enrichment='enrichment',
+                               go_table_path=enrichment_analysis_path,
+                               go_begin=go_list[0],
+                               go_head=go_list[1],
+                               go_body=go_list[2:15],
+                               # go_barplot_path=enrichment_analysis_path['go_barplot_path'],
+                               dag_plots=dag_plots,
+                               dag_bp_path=enrichment_analysis_path['dag_bp_path'],
+                               dag_cc_path=enrichment_analysis_path['dag_cc_path'],
+                               dag_mf_path=enrichment_analysis_path['dag_mf_path'])
     else:
-        dag_plots = False
-
-    enrichment_dict = dict(enrichment='enrichment', kegg_begin=kegg_list[0],
-                           kegg_head=kegg_list[1], kegg_body=kegg_list[2:],
-                           go_begin=go_list[0], go_head=go_list[1], go_body=go_list[2:],
-                           go_barplot_path=enrichment_analysis_path['go_barplot_path'],
-                           dag_plots=dag_plots,
-                           dag_bp_path=enrichment_analysis_path['dag_bp_path'],
-                           dag_cc_path=enrichment_analysis_path['dag_cc_path'],
-                           dag_mf_path=enrichment_analysis_path['dag_mf_path'],
-                           kegg_barplot_path=enrichment_analysis_path['kegg_barplot_path'],
-                           pathview_path=enrichment_analysis_path['pathview_path'],
-                           go_table_path=enrichment_analysis_path['go_table_path'],
-                           kegg_table_path=enrichment_analysis_path['kegg_table_path'])
-
+        enrichment_dict = {}
     return enrichment_dict
 
 
@@ -171,56 +179,50 @@ def fastqc_analysis_part(generate_report_path, part):
         qc_table_path=fastqc_analysis_path['qc_table_path'],
         data_stat='data_stat')
 
-    mapping_path = pdf_analysis_path['mapping']
-    if check_file(mapping_path, generate_report_path, part=False):
-        mapping_list = three_line_list(mapping_path['mapping_table_path'],
-                                       colunms=4)
-        fastqc_dict.update(dict(
-            mapping='mapping',
-            mapping_begin=mapping_list[0],
-            mapping_head=mapping_list[1],
-            mapping_body=mapping_list[2:],
-            mapping_plot_path=mapping_path['mapping_plot_path'],
-            mapping_table_path=mapping_path['mapping_table_path'],
-        ))
-
     snp_path = pdf_analysis_path['snp']
     if check_file(snp_path, generate_report_path, part=False):
         snp_list = three_line_list(snp_path['snp_num_table'],
                                    colunms=4)
         fastqc_dict.update(dict(
             snp='snp',
-            exome='exome',
             snp_num_begin=snp_list[0],
             snp_num_head=snp_list[1],
             snp_num_body=snp_list[2:],
             snp_num_table=snp_path['snp_num_table'],
             snp_plot_path=snp_path['snp_plot_path'],
-            report_name='Exome Report'
         ))
-    else:
-        fastqc_dict.update(
-            {'rna': 'rna',
-             'report_name': 'RNAseq Report'})
 
     return fastqc_dict
 
 
 def mapping_analysis_part(generate_report_path, part):
     mapping_analysis_path = pdf_analysis_path['mapping']
-    check_file(mapping_analysis_path, generate_report_path, part)
-    mapping_list = three_line_list(
-        mapping_analysis_path['mapping_table_path'], colunms=7)
+    if check_file(mapping_analysis_path, generate_report_path, part):
+        mapping_list = three_line_list(mapping_analysis_path['mapping_table_path'],
+                                       colunms=4)
 
-    mapping_dict = dict(
-        mapping_begin=mapping_list[0],
-        mapping_head=mapping_list[1],
-        mapping_body=mapping_list[2:],
-        mapping_plot_path=mapping_analysis_path['mapping_plot_path'],
-        mapping_table_path=mapping_analysis_path['mapping_table_path'],
-        mapping='mapping')
-
+        mapping_dict = dict(
+            mapping_begin=mapping_list[0],
+            mapping_head=mapping_list[1],
+            mapping_body=mapping_list[2:],
+            mapping_plot_path=mapping_analysis_path['mapping_plot_path'],
+            mapping_table_path=mapping_analysis_path['mapping_table_path'],
+            mapping='mapping')
+    else:
+        mapping_dict = {}
     return mapping_dict
+
+
+def lnc_analysis_part(generate_report_path, part):
+    lnc_analysis_path = pdf_analysis_path['lnc']
+    if check_file(lnc_analysis_path, generate_report_path, part):
+        lnc_dict = dict(
+            lnc_pie_plot=lnc_analysis_path['lnc_pie_plot'],
+            feelnc_plot=lnc_analysis_path['feelnc_plot'],
+            lnc_filter='lnc_filter')
+    else:
+        lnc_dict = {}
+    return lnc_dict
 
 
 def rseqc_analysis_part(generate_report_path, part):
@@ -241,23 +243,12 @@ def quant_analysis_part(generate_report_path, part):
     quantification_analysis_path = pdf_analysis_path['quantification']
     check_file(diff_analysis_path, generate_report_path, part)
     check_file(quantification_analysis_path, generate_report_path, part)
-    diff_list = three_line_list(
-        diff_analysis_path['diff_table_path'], colunms=5)
-    gene_count_list = three_line_list(
-        quantification_analysis_path['gene_table_path'], colunms=6)
-    quant_dict = dict(gene_count_begin=gene_count_list[0],
-                      gene_count_head=gene_count_list[1],
-                      gene_count_body=gene_count_list[2:],
-                      diff_begin=diff_list[0], diff_head=diff_list[1], diff_body=diff_list[2:],
-                      correlation_heatmap_path=quantification_analysis_path['correlation_heatmap_path'],
-                      gene_expression_path=quantification_analysis_path['gene_expression_path'],
-                      pca_plot_path=quantification_analysis_path['pca_plot_path'],
-                      gene_table_path=quantification_analysis_path['gene_table_path'],
-                      volcano_plot_path=diff_analysis_path['volcano_plot_path'],
-                      diff_heatmap_path=diff_analysis_path['diff_heatmap_path'],
-                      diff_table_path=diff_analysis_path['diff_table_path'],
-                      quant='quant',
-                      diff='diff')
+    quant_dict = dict(
+        gene_expression_path=quantification_analysis_path['gene_expression_path'],
+        pca_plot_path=quantification_analysis_path['pca_plot_path'],
+        volcano_plot_path=diff_analysis_path['volcano_plot_path'],
+        quant='quant',
+        diff='diff')
 
     return quant_dict
 
@@ -276,7 +267,7 @@ def check_analysis_part(
 
 
 def create_pdf_report(generate_report_path, project_name,
-                      project_id, part, company='onmath'):
+                      project_id, part, company, project_type):
     '''
     param:a path where to your analysis's report data
     function:generate report tex file
@@ -296,6 +287,7 @@ def create_pdf_report(generate_report_path, project_name,
         company_full_name=company_setting_mannager[company]['company_full_name'],
         company_website=company_setting_mannager[company]['company_website'],
         company_abbr=company_setting_mannager[company]['company_abbr'],
+        cover_path=company_setting_mannager[company]['cover_path'],
     )
     pdf_param_dict.update(pdf_head_sup_dict)
     # enrichment:
@@ -305,8 +297,37 @@ def create_pdf_report(generate_report_path, project_name,
                                       {'data_stat': None},
                                       'fastqc', part,
                                       func=fastqc_analysis_part)
+    mapping_dict = check_analysis_part(generate_report_path,
+                                       mRNA_data_dict['mapping'],
+                                       {'mapping': None},
+                                       'mapping', part,
+                                       func=mapping_analysis_part)
+    enrich_dict = check_analysis_part(generate_report_path,
+                                      mRNA_data_dict['enrichment'],
+                                      {'enrichment': None},
+                                      'enrichment', part,
+                                      func=enrichment_analysis_part)
+    quant_dict = check_analysis_part(generate_report_path,
+                                     mRNA_data_dict['quantification'],
+                                     {'quant': None, 'diff': None},
+                                     'quant', part,
+                                     func=quant_analysis_part)
+    lnc_dict = check_analysis_part(generate_report_path,
+                                   mRNA_data_dict['lnc'],
+                                   {'lnc_filter': None},
+                                   'lnc', part,
+                                   func=lnc_analysis_part)
+
     pdf_param_dict.update(fastqc_dict)
-    # mapping:
+    pdf_param_dict.update(mapping_dict)
+    pdf_param_dict.update(enrich_dict)
+    pdf_param_dict.update(quant_dict)
+    pdf_param_dict.update(lnc_dict)
+
+    report_name = PROJECT_CN.get(project_type)
+    pdf_param_dict.update({
+        'report_name': report_name,
+    })
 
     template = pdf_jinja_env.get_template('mRNA_base')
 

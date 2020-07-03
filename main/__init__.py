@@ -44,6 +44,7 @@ mRNA_result_path = command.get(
     'mRNA-report-result', 'report_result_path')
 enrichment_path = command.get(
     'mRNA-path', 'enrichment_path')
+lnc_path = command.get('mRNA-path', 'lnc_path')
 fastqc_path = command.get(
     'mRNA-path', 'fastqc_path')
 mapping_path = command.get(
@@ -73,6 +74,10 @@ company_website = command.get(
     'mRNA-pdf-static', 'company_website')
 company_abbr = command.get(
     'mRNA-pdf-static', 'company_abbr')
+cover_path = os.path.join(CFG_DIR, command.get(
+    'mRNA-pdf-static', 'company_cover'
+))
+
 
 # tcuni
 tcuni_logo_path = os.path.join(CFG_DIR, command.get(
@@ -83,6 +88,9 @@ tcuni_company_website = command.get(
     'mRNA-pdf-static', 'tcuni_company_website')
 tcuni_company_abbr = command.get(
     'mRNA-pdf-static', 'tcuni_company_abbr')
+tcuni_cover_path = os.path.join(CFG_DIR, command.get(
+    'mRNA-pdf-static', 'tcuni_company_cover'
+))
 
 # TALLY
 tally_logo_path = os.path.join(CFG_DIR, command.get(
@@ -120,7 +128,8 @@ mRNA_data_dict = dict(
     enrichment=enrichment_path, fastqc='',
     mapping=mapping_path,
     quantification=quantification_path,
-    rseqc=rseqc_path)
+    rseqc=rseqc_path,
+    lnc=lnc_path)
 
 mRNA_result_dict = deepcopy(mRNA_data_dict)
 
@@ -130,16 +139,19 @@ mRNA_result_dict = deepcopy(mRNA_data_dict)
 
 # enrichment part
 enrichment_analysis_path = dict(
-    go_barplot_path='go.enrichment.barplot.pdf.png',
-    kegg_barplot_path='kegg.enrichment.barplot.pdf.png',
-    pathview_path='kegg.pathview.png', dag_bp_path='BP.GO.DAG.png',
-    dag_cc_path='CC.GO.DAG.png', dag_mf_path='MF.GO.DAG.png',
-    go_table_path='report.go.table.txt',
-    kegg_table_path='report.kegg.table.txt')
+    # kegg_barplot_path='kegg.enrichment.barplot.pdf.png',
+    # pathview_path='kegg.pathview.png',
+    # kegg_table_path='report.kegg.table.txt',
+    dag_bp_path='enrichment/BP.DAG.png',
+    dag_cc_path='enrichment/CC.DAG.png',
+    dag_mf_path='enrichment/MF.DAG.png',
+    go_table_path='enrichment/go.table.txt',
+    # go_barplot_path='enrichment/go.barplot.png'
+)
 
-for key, value in enrichment_analysis_path.items():
-    enrichment_analysis_path[key] = os.path.join(
-        mRNA_data_path, enrichment_path, value)
+# for key, value in enrichment_analysis_path.items():
+#     enrichment_analysis_path[key] = os.path.join(
+#         mRNA_data_path, enrichment_path, value)
 
 # fastqc part
 fastqc_analysis_path = dict(
@@ -149,36 +161,33 @@ fastqc_analysis_path = dict(
 
 # mapping part
 mapping_analysis_path = dict(
-    mapping_table_path='mapping_table.txt',
-    mapping_plot_path='mapping_stats_plot.png')
+    mapping_table_path='mapping/mapping_table.txt',
+    mapping_plot_path='mapping/mapping_stats_plot.png')
 
 # mapping part
 snp_analysis_path = dict(
     snp_num_table='snp/varNum.txt',
     snp_plot_path='snp/var_plot.png')
 
+# lnc part
+lnc_analysis_path = dict(
+    lnc_pie_plot='lncrna/lncRNA_classify.png',
+    feelnc_plot='lncrna/feelnc.png'
+)
+
 
 # quantification part
 expression_summary_dir = 'expression_summary'
 quantification_analysis_path = dict(
-    correlation_heatmap_path='Sample.correlation.heatmap.pdf.png',
-    gene_expression_path='Gene_expression.pdf.png',
-    pca_plot_path='PCA_plot.png',
-    gene_table_path='pdf.example.Gene.tpm.txt',
+    gene_expression_path='quantification/violin_plot.png',
+    pca_plot_path='quantification/PCA_plot.png',
 )
 
-for key, value in quantification_analysis_path.items():
-    quantification_analysis_path[key] = os.path.join(
-        mRNA_data_path, quantification_path, expression_summary_dir, value)
 
 # diff part
-diff_analysis_path = dict(volcano_plot_path='ALL.Volcano_plot.pdf.png',
-                          diff_heatmap_path='Diff.genes.heatmap.pdf.png',
-                          diff_table_path='pdf.example.diff.table.txt')
+diff_analysis_path = dict(
+    volcano_plot_path='quantification/volcano.png')
 
-for key, value in diff_analysis_path.items():
-    diff_analysis_path[key] = os.path.join(
-        mRNA_data_path, quantification_path, expression_summary_dir, value)
 
 # rseqc part
 rseqc_analysis_path = dict(
@@ -193,6 +202,7 @@ pdf_analysis_path = {'enrichment': enrichment_analysis_path,
                      'fastqc': fastqc_analysis_path,
                      'mapping': mapping_analysis_path,
                      'snp': snp_analysis_path,
+                     'lnc': lnc_analysis_path,
                      'quantification': quantification_analysis_path,
                      'diff': diff_analysis_path,
                      'rseqc': rseqc_analysis_path}
@@ -212,14 +222,18 @@ company_setting0 = {
     'logo_path': logo_path,
     'company_full_name': company_full_name,
     'company_website': company_website,
-    'company_abbr': company_abbr}
+    'company_abbr': company_abbr,
+    'cover_path': cover_path,
+}
 
 
 company_setting1 = {
     'logo_path': tcuni_logo_path,
     'company_full_name': tcuni_company_full_name,
     'company_website': tcuni_company_website,
-    'company_abbr': tcuni_company_abbr}
+    'company_abbr': tcuni_company_abbr,
+    'cover_path': tcuni_cover_path,
+}
 
 company_setting2 = {
     'logo_path': tally_logo_path,

@@ -1,0 +1,22 @@
+\BLOCK{ from 'plots_table' import plot,table }
+\section{SNP分析}
+此部分展示了SNP分析结果。我们使用 GATK\cite{gatk}(McKenna A et al. 2013)软件，
+所测基因组的SNPs和InDels进行分析。
+\BLOCK{ if snp_num_table }
+\subsection{SNP数量分布}
+SNP在染色体上的统计如下表所示。
+\VAR{ table(snp_num_begin, snp_num_head, snp_num_body,caption='SNP数量分布表') }
+\newpage
+\BLOCK{ endif }
+
+\BLOCK{ if snp_plot_path }
+\subsection{SNP特征}
+下图展示了SNP比例，位置以及基因结构上分布。
+\\
+\\
+\\
+\\
+\\
+\\
+\VAR{ plot(snp_plot_path,caption='SNP特征分布图')}
+\BLOCK{ endif }
